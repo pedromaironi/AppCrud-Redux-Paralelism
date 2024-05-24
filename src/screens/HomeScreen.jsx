@@ -1,9 +1,16 @@
+//! View
 import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {colors} from '../utils/colors';
 import fonts from '../utils/fonts';
+import {useNavigation} from '@react-navigation/native';
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
+  const handleLogin = () => {
+    navigation.navigate('LoginScreen');
+  };
+
   return (
     <View style={styles.container}>
       <Image source={require('../assets/man.png')} style={styles.logo} />
@@ -13,7 +20,9 @@ const HomeScreen = () => {
         Login, Consulta a una Api-Rest (Desarrollada en Springboot Java)
       </Text>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.loginButtonWrapper}>
+        <TouchableOpacity
+          style={styles.loginButtonWrapper}
+          onPress={handleLogin}>
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
       </View>
