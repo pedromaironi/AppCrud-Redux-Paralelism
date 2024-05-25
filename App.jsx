@@ -5,6 +5,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import HomeScreen from './src/screens/HomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
+import ThreadScreen from './src/screens/ThreadScreen';
+import ProductsScreen from './src/screens/ProductsScreen';
+import OrdersScreen from './src/screens/OrdersScreen';
 import {Provider} from 'react-redux';
 import store from './src/store';
 
@@ -19,6 +22,9 @@ const App = () => {
           <Stack.Screen name={'HomeScreen'} component={HomeScreen} />
           <Stack.Screen name={'LoginScreen'} component={LoginScreen} />
           <Stack.Screen name={'DashboardScreen'} component={DashboardScreen} />
+          <Stack.Screen name={'ThreadScreen'} component={ThreadScreen} />
+          <Stack.Screen name={'OrdersScreen'} component={OrdersScreen} />
+          <Stack.Screen name={'ProductsScreen'} component={ProductsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

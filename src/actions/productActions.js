@@ -56,6 +56,7 @@ export const fetchProducts = () => {
         stock: item.stock
       }));
       dispatch(fetchProductsSuccess(products));
+      return products;
     } catch (error) {
       console.error('Error fetching products:', error);
     }

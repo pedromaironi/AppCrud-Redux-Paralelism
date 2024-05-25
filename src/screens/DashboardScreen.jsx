@@ -1,46 +1,31 @@
-import React, {useEffect} from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import React from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {colors} from '../utils/colors';
 import fonts from '../utils/fonts';
-import ProductViewModel from '../view/productViewModel';
-import OrderViewModel from '../view/orderViewModel';
-import ProductForm from '../components/productForm';
 
 const DashboardScreen = () => {
-  const { products } = ProductViewModel();
-  const { orders } = OrderViewModel();
-
-  const renderItem = ({ item }) => (
-    <View style={styles.orderItem}>
-      <Text style={styles.orderName}>{item.name}</Text>
-      <Text style={styles.orderPrice}>{item.price}</Text>
-    </View>
-  );
-
-  const renderOrder = ({ item }) => (
-    <View style={styles.order}>
-      <Text style={styles.orderName}>{item.date}</Text>
-      <Text style={styles.orderPrice}>{item.total}</Text>
-    </View>
-  );
+  const navigation = useNavigation();
 
   return (
     <>
+      <Text style={styles.title}>Dashboard</Text>
       <View style={styles.container}>
-        <Text style={styles.title}>Lista de Productos</Text>
-        <FlatList
-          data={products}
-          renderItem={renderItem}
-          keyExtractor={item => item.id.toString()}
-        />
-      </View>
-      <View style={styles.container}>
-        <Text style={styles.title}>Lista de Ordenes</Text>
-        <FlatList
-          data={orders}
-          renderItem={renderOrder}
-          keyExtractor={order => order.id.toString()}
-        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('ProductsScreen')}>
+          <Text style={styles.buttonText}>Productos</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('OrdersScreen')}>
+          <Text style={styles.buttonText}>Órdenes</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('ThreadScreen')}>
+          <Text style={styles.buttonText}>Uso de Threads</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -51,31 +36,28 @@ export default DashboardScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: colors.white,
-    padding: 20,
   },
   title: {
-    fontSize: 24,
-    fontFamily: fonts.Bold,
+    fontSize: 34,
+    fontFamily: fonts.Medium,
     color: colors.primary,
+    backgroundColor: colors.white,
+    padding: 10
+  },
+  button: {
+    backgroundColor: colors.primary,
+    padding: 15,
+    borderRadius: 10,
     marginBottom: 20,
-  },
-  orderItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    width: '80%',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: colors.lightGray,
-    paddingVertical: 10,
   },
-  orderName: {
+  buttonText: {
+    fontSize: 18,
     fontFamily: fonts.Regular,
-    fontSize: 16,
-    color: colors.primary,
-  },
-  orderPrice: {
-    fontFamily: fonts.Regular,
-    fontSize: 16,
-    color: colors.secondary,
+    color: colors.white,
   },
 });

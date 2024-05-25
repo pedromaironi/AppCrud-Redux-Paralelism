@@ -57,6 +57,7 @@ export const fetchOrders= () => {
           payment: item.pago_envio
         }));
         dispatch(fetchOrderSuccess(orders));
+        return orders;
       } catch (error) {
         console.error('Error fetching orders:', error);
       }
