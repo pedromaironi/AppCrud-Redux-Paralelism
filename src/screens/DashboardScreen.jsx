@@ -1,56 +1,45 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, FlatList} from 'react-native';
 import {colors} from '../utils/colors';
 import fonts from '../utils/fonts';
+import ProductViewModel from '../view/productViewModel';
+import OrderViewModel from '../view/orderViewModel';
+import ProductForm from '../components/productForm';
 
 const DashboardScreen = () => {
-  // Ejemplo de datos de órdenes o productos
-  const orders = [
-    {id: '1', name: 'Orden 1', totalPrice: '$50.00'},
-    {id: '2', name: 'Orden 2', totalPrice: '$75.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    {id: '3', name: 'Orden 3', totalPrice: '$100.00'},
-    // Agrega más datos de órdenes o productos según sea necesario
-  ];
+  const { products } = ProductViewModel();
+  const { orders } = OrderViewModel();
 
-  // Renderizar cada elemento de la lista de órdenes o productos
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <View style={styles.orderItem}>
       <Text style={styles.orderName}>{item.name}</Text>
-      <Text style={styles.orderPrice}>{item.totalPrice}</Text>
+      <Text style={styles.orderPrice}>{item.price}</Text>
+    </View>
+  );
+
+  const renderOrder = ({ item }) => (
+    <View style={styles.order}>
+      <Text style={styles.orderName}>{item.date}</Text>
+      <Text style={styles.orderPrice}>{item.total}</Text>
     </View>
   );
 
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.title}>Lista de Órdenes</Text>
+        <Text style={styles.title}>Lista de Productos</Text>
         <FlatList
-          data={orders}
+          data={products}
           renderItem={renderItem}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id.toString()}
         />
       </View>
       <View style={styles.container}>
-        <Text style={styles.title}>Lista de Productos</Text>
+        <Text style={styles.title}>Lista de Ordenes</Text>
         <FlatList
           data={orders}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
+          renderItem={renderOrder}
+          keyExtractor={order => order.id.toString()}
         />
       </View>
     </>

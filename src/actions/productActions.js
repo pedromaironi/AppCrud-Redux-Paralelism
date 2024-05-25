@@ -1,6 +1,18 @@
 import axios from 'axios';
+import Products from '../models/Products';
+const headers = {
+    "Content-Type": "application/json"
+};
 
-const apiUrl = 'http://localhost:8080/products'; 
+axios.interceptors.response.use(
+    response => response,
+    error => {
+      console.error('Axios error:', error);
+      return Promise.reject(error);
+    }
+  );
+
+const apiUrl = 'http://192.168.100.7:8080/products'; 
 
 // Action types
 export const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
@@ -33,8 +45,17 @@ export const deleteProductSuccess = (id) => ({
 export const fetchProducts = () => {
   return async (dispatch) => {
     try {
-      const response = await axios.get(apiUrl);
-      dispatch(fetchProductsSuccess(response.data));
+      const response = await axios.get(apiUrl + "/all", {headers});
+      const products = response.data.map(item => ({
+        id: item.id,
+        name: item.nombre,
+        description: item.descripcion,
+        price: item.precio,
+        image: item.imagen,
+        category_id: item.id_categoria,
+        stock: item.stock
+      }));
+      dispatch(fetchProductsSuccess(products));
     } catch (error) {
       console.error('Error fetching products:', error);
     }
