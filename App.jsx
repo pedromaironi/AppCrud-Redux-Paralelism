@@ -10,6 +10,7 @@ import ProductsScreen from './src/screens/ProductsScreen';
 import OrdersScreen from './src/screens/OrdersScreen';
 import {Provider} from 'react-redux';
 import store from './src/store';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 const Stack = createNativeStackNavigator();
 const styles = StyleSheet.create({});
@@ -17,6 +18,7 @@ const styles = StyleSheet.create({});
 const App = () => {
   return (
     <Provider store={store}>
+      <PaperProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name={'HomeScreen'} component={HomeScreen} />
@@ -27,6 +29,7 @@ const App = () => {
           <Stack.Screen name={'ProductsScreen'} component={ProductsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
+      </PaperProvider>
     </Provider>
   );
 };
