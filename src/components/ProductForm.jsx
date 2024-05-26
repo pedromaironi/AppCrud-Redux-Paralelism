@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, useTheme, Title } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
-import { createProduct, updateProduct } from '../actions/productActions';
+import { createProduct, fetchProducts, updateProduct } from '../actions/productActions';
 
 const ProductForm = ({ product, onCancel }) => {
   const [name, setName] = useState('');
@@ -16,13 +16,14 @@ const ProductForm = ({ product, onCancel }) => {
   const { colors } = useTheme();
 
   useEffect(() => {
+    console.log(product);
     if (product) {
       setName(product.name);
       setDescription(product.description);
-      setPrice(product.price.toString());
+      setPrice(product.price ? product.price.toString() : '');
       setImage(product.image);
-      setCategoryId(product.category_id.toString());
-      setStock(product.stock.toString());
+      setCategoryId(product.category_id ? product.category_id.toString() : '');
+      setStock(product.stock ? product.stock.toString() : '');
     }
   }, [product]);
 
@@ -36,7 +37,8 @@ const ProductForm = ({ product, onCancel }) => {
       stock: parseInt(stock),
     };
     if (product) {
-      dispatch(updateProduct({ ...newProduct, id: product.id }));
+      dispatch(updateProduct(product.id, newProduct ));
+      dispatch(fetchProducts());
     } else {
       dispatch(createProduct(newProduct));
     }

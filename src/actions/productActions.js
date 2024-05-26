@@ -82,7 +82,6 @@ export const createProduct = (productData) => {
     stock: parseFloat(stock),
   }
   
-  console.log(productDataFormat);
   return async dispatch => {
     try {
       const response = await axios.post(apiUrl + '/create', productDataFormat);
@@ -95,9 +94,27 @@ export const createProduct = (productData) => {
 };
 
 export const updateProduct = (id, productData) => {
+  const {
+    name: nombre,
+    description: descripcion,
+    image: imagen,
+    price: precio,
+    stock,
+    id_category: id_categoria,
+  } = productData;
+  
+  const productDataFormat = {
+    nombre,
+    descripcion,
+    imagen,
+    precio: parseFloat(precio),
+    id_categoria: parseInt(id_categoria, 10),
+    stock: parseFloat(stock),
+  }
+  
   return async dispatch => {
     try {
-      const response = await axios.put(`${apiUrl}/${id}`, productData);
+      const response = await axios.put(`${apiUrl}/update/${id}`, productDataFormat);
       dispatch(updateProductSuccess(response.data));
     } catch (error) {
       console.error('Error updating product:', error);

@@ -12,6 +12,7 @@ const ProductsScreen = () => {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
     const loadProducts = async () => {
       await dispatch(fetchProducts());
@@ -21,8 +22,10 @@ const ProductsScreen = () => {
   }, [dispatch]);
 
   const handleEdit = (product) => {
+    setLoading(true);
     setSelectedProduct(product);
     setShowForm(true);
+    setLoading(false);
   };
 
   const handleDelete = async (id) => {
@@ -42,9 +45,11 @@ const ProductsScreen = () => {
     setSelectedProduct(null);
   };
 
-  const renderItem = useCallback(({ item }) => (
-    <MemoizedProductCard item={item} onEdit={handleEdit} onDelete={handleDelete} />
-  ), [handleEdit, handleDelete]);
+  const renderItem = useCallback(({ item }) => {
+    return (
+      <MemoizedProductCard item={item} onEdit={handleEdit} onDelete={handleDelete} />
+    );
+  }, [handleEdit, handleDelete]);
 
   return (
     <View style={styles.container}>
@@ -57,7 +62,7 @@ const ProductsScreen = () => {
           <FlatList
             data={products}
             renderItem={renderItem}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={item => item.id}
           />
           <FAB
             style={styles.fab}
