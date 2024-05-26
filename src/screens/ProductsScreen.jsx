@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useCallback  } from 'react';
+import { View, FlatList, StyleSheet, ActivityIndicator  } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, deleteProduct } from '../actions/productActions';
 import ProductForm from '../components/ProductForm';
@@ -10,9 +10,14 @@ const ProductsScreen = () => {
   const products = useSelector(state => state.products);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    const loadProducts = async () => {
+      await dispatch(fetchProducts());
+      setLoading(false);
+    };
+    loadProducts();
   }, [dispatch]);
 
   const handleEdit = (product) => {
@@ -20,8 +25,11 @@ const ProductsScreen = () => {
     setShowForm(true);
   };
 
-  const handleDelete = (id) => {
-    dispatch(deleteProduct(id));
+  const handleDelete = async (id) => {
+    setLoading(true);
+    await dispatch(deleteProduct(id));
+    await dispatch(fetchProducts());
+    setLoading(false);
   };
 
   const handleAdd = () => {
@@ -34,23 +42,15 @@ const ProductsScreen = () => {
     setSelectedProduct(null);
   };
 
-  const renderItem = ({ item }) => (
-    <Card style={styles.card}>
-      <Card.Content>
-        <Title>{item.name}</Title>
-        <Paragraph>{item.description}</Paragraph>
-        <Paragraph>${item.price}</Paragraph>
-      </Card.Content>
-      <Card.Actions>
-        <Button onPress={() => handleEdit(item)}>Editar</Button>
-        <Button onPress={() => handleDelete(item.id)}>Eliminar</Button>
-      </Card.Actions>
-    </Card>
-  );
+  const renderItem = useCallback(({ item }) => (
+    <MemoizedProductCard item={item} onEdit={handleEdit} onDelete={handleDelete} />
+  ), [handleEdit, handleDelete]);
 
   return (
     <View style={styles.container}>
-      {showForm ? (
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) :showForm ? (
         <ProductForm product={selectedProduct} onCancel={handleCancel} />
       ) : (
         <>
@@ -69,6 +69,22 @@ const ProductsScreen = () => {
     </View>
   );
 };
+
+const ProductCard = ({ item, onEdit, onDelete }) => (
+  <Card style={styles.card}>
+    <Card.Content>
+      <Title>{item.name}</Title>
+      <Paragraph>{item.description}</Paragraph>
+      <Paragraph>${item.price}</Paragraph>
+    </Card.Content>
+    <Card.Actions>
+      <Button onPress={() => onEdit(item)}>Editar</Button>
+      <Button onPress={() => onDelete(item.id)}>Eliminar</Button>
+    </Card.Actions>
+  </Card>
+);
+
+const MemoizedProductCard = React.memo(ProductCard);
 
 const styles = StyleSheet.create({
   container: {
